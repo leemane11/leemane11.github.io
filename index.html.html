@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>美味速食店</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            background-color: #ff6b6b;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+        }
+
+        nav {
+            background-color: #ff8787;
+            padding: 0.5rem;
+            position: fixed;
+            top: 60px;
+            width: 100%;
+            z-index: 99;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .menu-section {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 120px auto 0;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .menu-item {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .menu-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .menu-item-content {
+            padding: 1rem;
+        }
+
+        .price {
+            color: #ff6b6b;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .add-to-cart {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .cart-icon {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            background-color: #ff6b6b;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            z-index: 101;
+        }
+
+        #cart-count {
+            background-color: white;
+            color: #ff6b6b;
+            border-radius: 50%;
+            padding: 0.2rem 0.5rem;
+            margin-left: 0.5rem;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+
+            .menu-section {
+                margin-top: 160px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>美味速食店</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#menu">菜單</a></li>
+            <li><a href="#about">關於我們</a></li>
+            <li><a href="#contact">聯絡資訊</a></li>
+        </ul>
+    </nav>
+
+    <div class="cart-icon">
+        購物車 <span id="cart-count">0</span>
+    </div>
+
+    <section id="menu" class="menu-section">
+        <h2>熱門餐點</h2>
+        <div class="menu-grid">
+            <!-- 餐點項目將由 JavaScript 動態生成 -->
+        </div>
+    </section>
+
+    <footer>
+        <p>營業時間：週一至週日 10:00-22:00</p>
+        <p>電話：(02) 1234-5678</p>
+        <p>地址：台北市某某區某某路123號</p>
+    </footer>
+
+    <script>
+        const menuItems = [
+            {
+                name: '經典牛肉漢堡',
+                price: 120,
+                description: '100%純牛肉排，搭配新鮮生菜、番茄和特製醬料',
+                image: '12.jpg'
+            },
+            {
+                name: '雙層起司漢堡',
+                price: 150,
+                description: '雙層牛肉排與雙倍起司，濃郁美味',
+                image: '112.jpg'
+            },
+            {
+                name: '炸雞排套餐',
+                price: 140,
+                description: '酥脆多汁的炸雞排，搭配薯條和飲料',
+                image: '1112.jpg'
+            },
+            {
+                name: '義式香腸堡',
+                price: 130,
+                description: '香料醃製的義式香腸，配上烤蔬菜',
+                image: '1212.jpg'
+            },
+            {
+                name: '辣味墨西哥漢堡',
+                price: 160,
+                description: '添加墨西哥莎莎醬和墨西哥辣椒，搭配酪梨醬',
+                image: '1111.jpg'
+            },
+            {
+                name: '蘑菇瑞士漢堡',
+                price: 145,
+                description: '香煎蘑菇、瑞士起司，搭配特製蒜香美乃滋',
+                image: '12222.jpg'
+            }
+        ];
+
+        let cartCount = 0;
+
+        function createMenuItem(item) {
+            const div = document.createElement('div');
+            div.className = 'menu-item';
+            div.innerHTML = `
+                <img src="${item.image}" alt="${item.name}">
+                <div class="menu-item-content">
+                    <h3>${item.name}</h3>
+                    <p>${item.description}</p>
+                    <p class="price">NT$ ${item.price}</p>
+                    <button class="add-to-cart" onclick="addToCart()">加入購物車</button>
+                </div>
+            `;
+            return div;
+        }
+
+        function addToCart() {
+            cartCount++;
+            document.getElementById('cart-count').textContent = cartCount;
+        }
+
+        function initializeMenu() {
+            const menuGrid = document.querySelector('.menu-grid');
+            menuItems.forEach(item => {
+                menuGrid.appendChild(createMenuItem(item));
+            });
+        }
+
+        // 初始化網站
+        initializeMenu();
+    </script>
+</body>
+</html>
